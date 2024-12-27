@@ -23,7 +23,7 @@ const Form = () => {
     setSuccessMessage(null); // Reset success message
 
     try {
-      const response = await axios.post("http://localhost:5000/submit", formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/submit`, formData);
       setSuccessMessage(response.data); // Display success message
       setIsSubmitting(false);
       setFormData({ name: "", email: "", message: "" });
