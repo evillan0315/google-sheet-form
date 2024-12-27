@@ -10,7 +10,14 @@ const ViewData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/data`);
+        const token = localStorage.getItem('token'); 
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/data`, {
+          method: 'GET',
+          headers: {
+            'Authorization': token,
+          },
+        });
+
         setData(response.data);
         setLoading(false);
       } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = ({ setIsLoggedIn }) => {
@@ -6,8 +6,21 @@ const LoginPage = ({ setIsLoggedIn }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
   const navigate = useNavigate(); // Initialize useNavigate hook
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setIsLoggedIn(true);
+      // Redirect to the dashboard after successful login
+      navigate('/dashboard'); 
+    } else {
+        setIsLoggedIn(false);
+        navigate('/sign-in'); 
+    }
+  }, [setIsLoggedIn, navigate]);
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +37,8 @@ const LoginPage = ({ setIsLoggedIn }) => {
       });
 
       if (response.ok) {
+       const data = await response.json();
+        localStorage.setItem('authToken', data.token); 
         setSuccess('Login successful!');
         setEmail('');
         setPassword('');
